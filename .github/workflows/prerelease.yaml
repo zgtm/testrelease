@@ -18,11 +18,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" \
-            --prerelease
-            --verify-tag \
-            --generate-notes \
-            --title "${GITHUB_REF_NAME}"
+          gh release create --prerelease --verify-tag --generate-notes --title "${GITHUB_REF_NAME}" "${GITHUB_REF_NAME}"
 
       - name: Upload artifacts
         env:
