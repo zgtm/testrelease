@@ -30,7 +30,7 @@ jobs:
           git remote add source ../source
           #git fetch source
           git fetch --unshallow source refs/tags/$GITHUB_REF_NAME:refs/tags/$GITHUB_REF_NAME
-          git merge source/$GITHUB_REF_NAME
+          git merge $GITHUB_REF_NAME
           git push
 
       - name: Create release in another repo
