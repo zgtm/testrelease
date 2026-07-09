@@ -31,7 +31,8 @@ jobs:
           git remote add source ../source
           #git fetch source
           git fetch --unshallow source refs/tags/$GITHUB_REF_NAME:refs/tags/$GITHUB_REF_NAME
-          git fetch --unshallow
+          git config user.email "releases@peeriot.io"
+          git config user.name "Peeriot Release Pipeline"
           git merge --allow-unrelated-histories $GITHUB_REF_NAME
           git push
 
