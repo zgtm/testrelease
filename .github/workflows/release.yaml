@@ -29,7 +29,7 @@ jobs:
           cd target
           git remote add source ../source
           #git fetch source
-          git fetch source refs/tags/$GITHUB_REF_NAME:refs/tags/$GITHUB_REF_NAME
+          git fetch --unshallow source refs/tags/$GITHUB_REF_NAME:refs/tags/$GITHUB_REF_NAME
           git merge source/$GITHUB_REF_NAME
           git push
 
