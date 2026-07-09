@@ -2,7 +2,7 @@ name: Release
 
 on:
   release:
-    types: [published]
+    types: [published, edited]
 
 permissions:
   contents: write
@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           repository: zgtm/mysoftware
-          token: ${{ secrets.REPO_TOKEN }}   # Required if different/private repo
+          token: ${{ secrets.REPO_TOKEN }}
           path: target
 
       - name: Merge repositories
@@ -34,6 +34,6 @@ jobs:
 
       - name: Create release in another repo
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           gh release create --repo zgtm/mysoftware --generate-notes "${GITHUB_REF_NAME}"
