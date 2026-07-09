@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: "!github.event.release.prerelease"
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v6
+        with:
+          path: source
+
+      - name: Checkout target repository
+        uses: actions/checkout@v6
+        with:
+          repository: zgtm/mysoftware
+          token: ${{ secrets.REPO_TOKEN }}   # Required if different/private repo
+          path: target
+
+      - name: Merge repositories
+        run: |
+          cd target
+          git remote add source ../source
+          git fetch source
+          git merge source/$GITHUB_REF_NAME
+          git push
+
+      - name: Create release in another repo
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          gh release create --repo zgtm/mysoftware --generate-notes "${GITHUB_REF_NAME}"
