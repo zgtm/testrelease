@@ -32,7 +32,7 @@ jobs:
           #git fetch source
           git fetch --unshallow source refs/tags/$GITHUB_REF_NAME:refs/tags/$GITHUB_REF_NAME
           git fetch --unshallow
-          git merge $GITHUB_REF_NAME
+          git merge --allow-unrelated-histories $GITHUB_REF_NAME
           git push
 
       - name: Create release in another repo
