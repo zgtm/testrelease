@@ -20,6 +20,7 @@ jobs:
         run: |
           gh release create --draft --verify-tag --generate-notes --title "${GITHUB_REF_NAME}" "${GITHUB_REF_NAME}"
 
+
       - name: Upload artifacts
         env:
           GH_TOKEN: ${{ github.token }}
