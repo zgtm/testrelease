@@ -2,7 +2,7 @@ name: Release
 
 on:
   release:
-    types: [published, edited]
+    types: [published, edited released]
 
 permissions:
   contents: write
@@ -10,7 +10,7 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: "!github.event.release.prerelease"
+    if: ${{ !github.event.release.prerelease }}
     steps:
       - name: Checkout source repository
         uses: actions/checkout@v6
