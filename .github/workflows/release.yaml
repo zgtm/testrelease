@@ -47,7 +47,7 @@ jobs:
 
       - name: Download and reupload artifacts
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           mkdir assets
           gh release download --repo zgtm/testrelease "${GITHUB_REF_NAME}" --dir assets
