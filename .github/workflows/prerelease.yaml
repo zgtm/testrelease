@@ -11,7 +11,7 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: github.repository != 'peeriot/mysoftware'
+    if: github.repository != 'zgtm/mysoftware'
     steps:
       - uses: actions/checkout@v6
 
