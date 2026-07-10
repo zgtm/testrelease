@@ -50,5 +50,5 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir assets
-          gh release download "${GITHUB_REF_NAME}" --dir assets
+          gh release download --repo zgtm/testrelease "${GITHUB_REF_NAME}" --dir assets
           gh release upload --repo zgtm/mysoftware "${GITHUB_REF_NAME}" assets/*
