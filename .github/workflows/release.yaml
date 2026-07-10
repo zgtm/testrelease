@@ -16,39 +16,6 @@ jobs:
     steps:
       - name: Checkout source repository
         uses: actions/checkout@v6
-        with:
-          path: source
-          fetch-depth: 0 # Needed to merge histories
 
-      - name: Checkout target repository
-        uses: actions/checkout@v6
-        with:
-          repository: zgtm/mysoftware
-          token: ${{ secrets.REPO_TOKEN }}
-          path: target
-          fetch-depth: 0 # Needed to merge histories
-
-      - name: Merge repositories
-        run: |
-          cd target
-          git remote add source ../source
-          git fetch source refs/tags/$GITHUB_REF_NAME:refs/tags/$GITHUB_REF_NAME
-          git config user.email "releases@peeriot.io"
-          git config user.name "Peeriot Release Pipeline"
-          git merge $GITHUB_REF_NAME
-          git push
-
-      - name: Create release in another repo
-        env:
-          GH_TOKEN: ${{ secrets.REPO_TOKEN }}
-        run: |
-          gh release create --repo zgtm/mysoftware --generate-notes "${GITHUB_REF_NAME}"
-
-
-      - name: Download and reupload artifacts
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          mkdir assets
-          gh release download "${GITHUB_REF_NAME}" --dir assets
-          gh release upload --repo zgtm/mysoftware "${GITHUB_REF_NAME}" assets/*
+      - run: |
+          echo "hellllooo"
