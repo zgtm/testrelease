@@ -1,9 +1,9 @@
 name: Release
-
+### NOTE: This pipeline needs a secret REPO_TOKEN with workflow scope in order to push merged workflow files to the new repository
 
 on:
   release:
-    types: [published, edited released]
+    types: [published]
 
 permissions:
   contents: write
@@ -11,7 +11,8 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: ${{ !github.event.release.prerelease }}
+    if: github.repository != 'zgtm/mysoftware' &&
+        (github.event_name != 'release' || !github.event.release.draft)
     steps:
       - name: Checkout source repository
         uses: actions/checkout@v6
@@ -31,7 +32,6 @@ jobs:
         run: |
           cd target
           git remote add source ../source
-          #git fetch source
           git fetch source refs/tags/$GITHUB_REF_NAME:refs/tags/$GITHUB_REF_NAME
           git config user.email "releases@peeriot.io"
           git config user.name "Peeriot Release Pipeline"
@@ -43,3 +43,12 @@ jobs:
           GH_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           gh release create --repo zgtm/mysoftware --generate-notes "${GITHUB_REF_NAME}"
+
+
+      - name: Download and reupload artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir assets
+          gh release download "${GITHUB_REF_NAME}" --dir assets
+          gh release upload --repo zgtm/mysoftware "${GITHUB_REF_NAME}" assets/*
