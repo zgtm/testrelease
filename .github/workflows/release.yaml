@@ -14,6 +14,10 @@ jobs:
     if: github.repository != 'zgtm/mysoftware' &&
         (github.event_name != 'release' || !github.event.release.draft)
     steps:
+      - name: Strip release-candidate suffix for release version
+        run: |
+          echo "VERSION_BASE=${GITHUB_REF_NAME%%-*}" >> "$GITHUB_ENV"
+
       - name: Checkout source repository
         uses: actions/checkout@v6
         with:
@@ -42,7 +46,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
-          gh release create --repo zgtm/mysoftware --generate-notes "${GITHUB_REF_NAME}"
+          gh release create --repo zgtm/mysoftware --generate-notes "${VERSION_BASE}"
 
 
       - name: Download and reupload artifacts
@@ -50,5 +54,5 @@ jobs:
           GH_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           mkdir assets
-          gh release download --repo zgtm/testrelease "${GITHUB_REF_NAME}" --dir assets
-          gh release upload --repo zgtm/mysoftware "${GITHUB_REF_NAME}" assets/*
+          gh release download --repo zgtm/testrelease "${VERSION_BASE}" --dir assets
+          gh release upload --repo zgtm/mysoftware "${VERSION_BASE}" assets/*
